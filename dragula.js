@@ -403,6 +403,7 @@ function dragula (initialContainers, options) {
       }
       return;
     }
+    if (!chkIsNotAncestor(item, dropTarget)) return;
     if (
       (reference === null && changed) ||
       reference !== item &&
@@ -609,6 +610,23 @@ function getCoord (coord, e) {
     coord = missMap[coord];
   }
   return host[coord];
+}
+
+function chkIsNotAncestor (target, el) {
+  if (target == el) {
+    return false;
+  }
+  if (target.childNodes) {
+    for(var i in target.childNodes) {
+      var child = target.childNodes[i];
+      if (child instanceof HTMLElement && !chkIsNotAncestor(child, el)) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return true;
+  }
 }
 
 module.exports = dragula;
